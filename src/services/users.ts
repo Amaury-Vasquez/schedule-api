@@ -1,5 +1,4 @@
 import { MongoLib } from "../lib/mongo";
-
 export class UserService {
   private collection: string;
   private mongoDB: MongoLib;
@@ -9,7 +8,23 @@ export class UserService {
     this.mongoDB = new MongoLib();
   }
 
+  async createMany(data: any[]) {
+    const inserted = await this.mongoDB.createMany(this.collection, data);
+    return inserted;
+  }
+
+  async createUser(data: {}) {
+    const inserted = await this.mongoDB.createOne(this.collection, data);
+    return inserted || {};
+  }
+
+  async get(id: string) {
+    const user = await this.mongoDB.getOne(this.collection, id);
+    return user || {};
+  }
+
   async getUsers() {
-    return await this.mongoDB.getAll(this.collection);
+    const users = await this.mongoDB.getAll(this.collection);
+    return users || [];
   }
 }
