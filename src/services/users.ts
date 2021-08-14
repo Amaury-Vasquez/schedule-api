@@ -18,8 +18,8 @@ export class UserService {
     return inserted || {};
   }
 
-  async get(id: string) {
-    const user = await this.mongoDB.getOne(this.collection, id);
+  async get(query: {}) {
+    const user = await this.mongoDB.getOne(this.collection, query);
     return user || {};
   }
 

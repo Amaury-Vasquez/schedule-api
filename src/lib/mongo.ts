@@ -1,11 +1,12 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 
 import { config } from "../config";
 
 const USER = encodeURIComponent(config.dbUser);
 const PASSWORD = encodeURIComponent(config.dbPassword);
 const DB_NAME = config.dbName;
-const MONGO_URI = `mongodb+srv://${USER}:${PASSWORD}@${config.dbHost}/${DB_NAME}?retryWrites=true&w=majority`;
+const DB_HOST = config.dbHost;
+const MONGO_URI = `mongodb+srv://${USER}:${PASSWORD}@${DB_HOST}/${DB_NAME}?retryWrites=true&w=majority`;
 
 export class MongoLib {
   static connection: MongoClient;
@@ -47,8 +48,8 @@ export class MongoLib {
     return await db.find({}).toArray();
   }
 
-  async getOne(collection: string, _id: string) {
+  async getOne(collection: string, query: {}) {
     const db = (await this.DB()).collection(collection);
-    return await db.findOne({ _id });
+    return await db.findOne(query);
   }
 }
