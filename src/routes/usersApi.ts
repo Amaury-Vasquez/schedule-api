@@ -31,7 +31,9 @@ export const usersApi = (app: Express) => {
           params: { id },
         } = req;
         const data = await userService.get({ _id: new ObjectId(id) });
-        res.status(200).json({ data, message: `user found` });
+        data
+          ? res.status(200).json({ data, message: `user found` })
+          : res.status(404).json({ message: "user not found" });
       } catch (err) {
         next(err);
       }
@@ -66,7 +68,7 @@ export const usersApi = (app: Express) => {
       try {
         const { username, password } = req.body;
         const data = await userService.get({ username, password });
-        data._id
+        data
           ? res.status(200).json({ data, message: "user found" })
           : res.status(404).json({ data, message: "bad auth, user not found" });
       } catch (err) {

@@ -1,6 +1,7 @@
 import { MongoClient, ObjectId } from "mongodb";
 
 import { config } from "../config";
+import { UserData } from "../interfaces/index";
 
 const USER = encodeURIComponent(config.dbUser);
 const PASSWORD = encodeURIComponent(config.dbPassword);
@@ -45,11 +46,20 @@ export class MongoLib {
 
   async getAll(collection: string) {
     const db = (await this.DB()).collection(collection);
-    return await db.find({}).toArray();
+    const users = await db.find({}).toArray();
+    return users.map((user) => {
+      const { _id, email, schedule, username } = user;
+      return { _id, email, schedule, username };
+    });
   }
 
   async getOne(collection: string, query: {}) {
     const db = (await this.DB()).collection(collection);
-    return await db.findOne(query);
+    const user = await db.findOne(query);
+    if (user) {
+      const { _id, email, schedule, username } = user;
+      return { _id, email, schedule, username };
+    }
+    return undefined;
   }
 }

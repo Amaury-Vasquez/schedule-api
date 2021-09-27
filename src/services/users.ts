@@ -15,12 +15,12 @@ export class UserService {
 
   async createUser(data: {}) {
     const inserted = await this.mongoDB.createOne(this.collection, data);
-    return inserted || {};
+    return inserted;
   }
 
   async get(query: {}) {
     const user = await this.mongoDB.getOne(this.collection, query);
-    return user || {};
+    return user;
   }
 
   async getUsers() {
